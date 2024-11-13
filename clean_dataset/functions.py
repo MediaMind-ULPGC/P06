@@ -1,9 +1,9 @@
 import cv2 as cv
 import numpy as np
 import os
+import matplotlib.pyplot as plt
 
 def binarize(gray, umbral=200):
-    umbral = 200
     _, binary = cv.threshold(gray, umbral, 255, cv.THRESH_BINARY_INV)
     binary = binary / 255
 
@@ -37,22 +37,16 @@ def cut_image(img, binary):
     return cutted_image
 
 
-def write_image(cutted_image, output_folder, file, final_size=600):
-    height, width = cutted_image.shape[:2]
-
-
-    padding_vertical = max(0, (final_size - height) // 2)
-    padding_horizontal = max(0, (final_size - width) // 2)
-
-    imagen_512x512 = cv.copyMakeBorder(
-        cutted_image,
-        top=padding_vertical,
-        bottom=padding_vertical + (final_size - height) % 2,
-        left=padding_horizontal,
-        right=padding_horizontal + (final_size - width) % 2, 
-        borderType=cv.BORDER_CONSTANT,
-        value=[255, 255, 255] 
-    )
-
+def write_image(cutted_image, output_folder, file, final_size=224):
+    imagen_resized = cv.resize(cutted_image, (final_size, final_size), interpolation=cv.INTER_LINEAR)
+    
     output_path = os.path.join(output_folder, file)
-    cv.imwrite(output_path, imagen_512x512)
+    gray = cv.cvtColor(imagen_resized, cv.COLOR_BGR2GRAY)
+
+    for _ in range(0, 10):
+        blurred_image = cv.medianBlur(gray, 3)
+        #blurred_image = cv.GaussianBlur(gray, (5, 5), 0)
+        gray = blurred_image
+    
+    cv.imwrite(output_path, gray)
+
