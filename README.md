@@ -1,3 +1,3 @@
 # Práctica Biometría
 
-[Ver el póster](poster.pdf)
+[Ver el póster](Poster_P06.pdf)
