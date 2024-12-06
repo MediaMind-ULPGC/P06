@@ -1,1 +1,3 @@
-# P06
+# Práctica Biometría
+
+[Ver el póster](poster.pdf)
